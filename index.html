@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="opj.css">
+  <meta charset="utf-8">
+</head>
+
+<style>
+    
+    *{
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+body{
+  display: flex;
+  justify-content:center ;
+  align-items: center;
+  height: 100vh;
+  background-image: linear-gradient( darkcyan, aqua,transparent) ;
+}
+.opj{
+  
+  width:80%;
+  height: 80%;
+  background-color: rgba(255,255,255,0.6);
+  border-radius:5px ;
+}
+
+
+body::after{
+  content: '';
+  width:100%;
+  height:100%;
+  background-color: burlywood;
+  position: absolute;
+  clip-path: circle(40% at right 70%);
+  z-index: -7;
+}
+
+.dec{
+  display: flex;
+  justify-content:   space-between;
+  align-items: center;
+  width: 80%;
+  margin: auto;
+  padding: 20px 0;
+}
+
+.hre1{
+  color: aliceblue ;
+  text-decoration:none ;
+  font-size: 32px;
+  text-transform: uppercase ;
+  letter-spacing:2px;
+  font-weight: 700px;
+  
+}
+div ul li {
+  display: inline-block;
+} 
+
+ul li a{
+  color: aliceblue  ;
+ text-decoration : none;
+  font-size: 15px;
+}
+form{
+  line-height: 3px;
+  margin:70px 0 0 20px;
+}
+
+label ,input{
+  margin: 10px ;
+}
+ label{
+  font-size: 20px;
+  color : cornflowerblue ;
+}
+#circal{
+  width:100%;
+  height: 100%;
+  background-color: cadetblue ;
+}
+input{
+  border: dotte red  12px  ;
+  
+}
+</style>
+<body>
+  
+ <div class="opj">
+   <div class="dec">
+    <a href="##" class="hre1">khalol</a>
+    <ul>
+      <li><a href="###a">Hows</a></li>
+      <li><a href="###ah">hgome</a></li>
+      <li><a href="###a">khalol</a></li>
+      
+    </ul>
+     
+    </div>
+   <form>
+     <lable>user name</lable>
+     <input type="text" placeholder="user name"><br>
+     <lable>password</lable>
+     <input type="password" placeholder="password"><br>
+      <lable>email</lable>
+     <input type="email"><br>
+     <input type="submit">
+   </form>
+     
+     
+   </div>
+  
+  
+  
+</body>
+</html>
